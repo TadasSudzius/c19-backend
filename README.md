@@ -1,5 +1,5 @@
 To run the project: 
-  get both copies of servers form github by runing code below: (password has been send @ur**.b************e@ibm.com )
+  get both copies of servers form github by runing code below: 
 ```
 git clone https://github.com/TadasSudzius/c19-frontend.git
 ```
@@ -23,19 +23,16 @@ cd c19-backend
 npm install
 ```
 Now you need to start servers by getting to their directories and runing command `npm start` , just before you run it make sure your ports `3000` (backend) and `8081` (frontend) are available. If you need to change them:
-for backend - change port value in file `env.js`, frontend - in file `package.json` change port number at the scripts object.
+for backend - change port value in file `env.js`, frontend - in file `package.json` change port number at the scripts object:
 ```
-...
 "start": "set PORT=8081 && react-scripts start",
-...
 ```
-if you are on the Linux command is sligtly different
+if you are on the Linux command should look like:
 ```
-...
 "start": "PORT=8081 react-scripts start",
-...
 ```
-
+### Docker
+Working with docker it's better to remove port part all together to avoid conflicts 
 
 Libraries and technologies:
 node.js
