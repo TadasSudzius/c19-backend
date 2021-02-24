@@ -1,52 +1,30 @@
-const https = require('https')
+import  https  from 'https'
+import { createServer } from 'http'
+import { requestHandler } from './requestHandler.js'
+import { hostname, port, apiUrl} from './env.js'
+import { handleData } from './dataHandler.js'
 
-// const hostname = '127.0.0.1'
-// const port = 3000
+/***********************
+ * Handle API request
+ ***********************/
 
-const zendpoint =
-  'https://zzopendata.ecdc.europa.eu/covid19/nationalcasedeath/json/'
-const endpoint = 'https://www.google.com/'
+let data = ''
+https.get( apiUrl , (res) => {
+  console.log('Connected. StatusCode:', res.statusCode);
 
-// const server = https.createServer((req, res) => {
-//   res.statusCode = 200
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.end('Testas!!!\n')
-// });
-
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at https://${hostname}:${port}/`)
-// })
-
-https
-  .get(endpoint, (res) => {
-    const statusCode = res.statusCode
-
-    console.log('Entered')
-    if (!statusCode || statusCode === !200) {
-      console.log('Request failed, status code: ', statusCode)
-    } else {
-      console.log('Connection established')
-    }
-
-    // console.log('Request header: ', res.headers)
-    //       res.on('data', (d) => {
-    //          process.stdout.write(d)
-    //       })
-    //       res.on('error', (e) => {
-    //          console.log(e)
-    //       })
-    //    })
+  res.on('data', (buffer) => {
+    data += buffer
   })
-  .on('error', (e) => {
-    console.log('This is error: ', e)
+  res.on('end', () => {
+    data = JSON.parse(data)
+    console.log('Data parsed')
+    handleData(data)
   })
+})
 
-// const readable = getReadableStreamSomehow();
-// readable.on('readable', function() {
-//   // There is some data to read now.
-//   let data;
+const server = createServer(requestHandler)
 
-//   while (data = this.read()) {
-//     console.log(data);
-//   }
-// })
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`)
+})
+
